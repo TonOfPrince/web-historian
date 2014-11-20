@@ -1,7 +1,8 @@
 var path = require('path');
 var archive = require('../helpers/archive-helpers');
-var httpHelper = require('./http-helpers.js')
+var httpHelper = require('./http-helpers.js');
 var fs = require('fs');
+var htmlFetcher = require('../workers/htmlfetcher')
 // require more modules/folders here!
 
 var urlLookup = {
@@ -32,6 +33,7 @@ exports.handleRequest = function (req, res) {
       } else {
         newChunk =  newChunk +'\n';
         fs.appendFile(archive.paths.list, newChunk);
+        htmlFetcher.scrapeUrl(newChunk)
         httpHelper.serveAssets(res, '/loading.html');
       }
 
