@@ -1,7 +1,7 @@
 // eventually, you'll have some code here that uses the code in `archive-helpers.js`
 // to actually download the urls you want to download.
 var archive = require('../helpers/archive-helpers');
-var http = require('http');
+var http = require('http-request');
 exports.scrapeUrl = function(getUrl) {
   http.get({
     url: 'http://' + getUrl,

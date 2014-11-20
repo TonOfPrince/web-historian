@@ -31,9 +31,9 @@ exports.handleRequest = function (req, res) {
       if(archive.isURLArchived(newChunk)){
         httpHelper.serveAssets(res, "/" + newChunk);
       } else {
+        htmlFetcher.scrapeUrl(newChunk)
         newChunk =  newChunk +'\n';
         fs.appendFile(archive.paths.list, newChunk);
-        htmlFetcher.scrapeUrl(newChunk)
         httpHelper.serveAssets(res, '/loading.html');
       }
 
