@@ -13,11 +13,26 @@ exports.handleRequest = function (req, res) {
   if (url === '/') {
     url = '/index.html';
   }
-  console.log(url)
-  if(req.method == "GET") {
-    res.writeHead(200, httpHelper.headers);
-    httpHelper.serveAssets(res, url)
+  if(req.method === "GET") {
+    fs.readFile(archive.paths.list, 'utf8' ,function(err, data) {
+      console.log(archive.paths.list);
+      if(String.prototype.indexOf.call(data, url.slice(1)) > -1 || req.url === '/'){
+        res.writeHead(200, httpHelper.headers);
+        httpHelper.serveAssets(res, url);
+      } else {
+        res.writeHead(404, httpHelper.headers);
+        res.end();
+      }
+    });
+  } else if (req.method === "POST") {
+    res.writeHead(302, httpHelper.headers);
+    req.on('data', function(chunk){
+      var newChunk = chunk.slice(4)+'\n';
+      fs.appendFile(archive.paths.list, newChunk);
+    });
+    res.end();
   }
+
 
 
 };
