@@ -2,6 +2,16 @@
 // to actually download the urls you want to download.
 var archive = require('../helpers/archive-helpers');
 var http = require('http-request');
+var fs = require('fs');
+
+fs.readFile(archive.paths.list, "utf-8", function(err,data) {
+  var dataArr = data.split('\n');
+
+  dataArr.forEach(function(url){
+    exports.scrapeUrl(url);
+  })
+});
+
 exports.scrapeUrl = function(getUrl) {
   http.get({
     url: 'http://' + getUrl,
