@@ -27,7 +27,6 @@ exports.initialize = function(pathsObj){
 
 exports.readListOfUrls = function(callback) {
   var resultArr = fs.readFileSync(this.paths.list, 'utf-8').split('\n');
-  console.log(resultArr);
   callback(resultArr);
 };
 
@@ -37,7 +36,15 @@ exports.isUrlInList = function(){
 exports.addUrlToList = function(){
 };
 
-exports.isURLArchived = function(){
+exports.isURLArchived = function(url){
+  var archivedFileArray = fs.readdirSync(exports.paths.archivedSites);
+  console.log(url, archivedFileArray);
+  var urlWithoutSlash = url;
+  if(url[0] === "/"){
+    urlWithoutSlash = url.slice(1);
+  }
+  console.log(urlWithoutSlash, archivedFileArray, 'sadfasdf');
+  return archivedFileArray.indexOf(urlWithoutSlash) > -1;
 };
 
 exports.downloadUrls = function(){

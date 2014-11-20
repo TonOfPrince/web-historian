@@ -14,23 +14,29 @@ exports.handleRequest = function (req, res) {
     url = '/index.html';
   }
   if(req.method === "GET") {
-    fs.readdir(archive.paths.archivedSites, function(err, data) {
-      console.log(Array.isArray(data) );
-      if(data.indexOf(url.slice(1)) > -1 || req.url === '/'){
-        res.writeHead(200, httpHelper.headers);
-        httpHelper.serveAssets(res, url);
-      } else {
-        res.writeHead(404, httpHelper.headers);
-        res.end();
-      }
-    });
+    if(archive.isURLArchived(url) || req.url === '/'){
+      res.writeHead(200, httpHelper.headers);
+      httpHelper.serveAssets(res, url);
+    } else {
+      res.writeHead(404, httpHelper.headers);
+      res.end();
+    }
   } else if (req.method === "POST") {
     res.writeHead(302, httpHelper.headers);
     req.on('data', function(chunk){
-      var newChunk = chunk.slice(4)+'\n';
-      fs.appendFile(archive.paths.list, newChunk);
+
+      var newChunk = chunk.toString().slice(4)
+      console.log(archive.isURLArchived(newChunk));
+      if(archive.isURLArchived(newChunk)){
+        httpHelper.serveAssets(res, "/" + newChunk);
+      } else {
+        newChunk =  newChunk +'\n';
+        fs.appendFile(archive.paths.list, newChunk);
+        httpHelper.serveAssets(res, '/loading.html');
+      }
+
     });
-    res.end();
+    //res.end();
   }
 
 

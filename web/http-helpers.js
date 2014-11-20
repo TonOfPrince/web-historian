@@ -12,7 +12,7 @@ exports.headers = headers = {
 
 exports.serveAssets = function(res, asset, callback) {
   var assetPath;
-  if(asset === "/index.html") {
+  if(asset === "/index.html" || asset === "/loading.html") {
     assetPath = archive.paths.siteAssets + asset;
   } else {
     assetPath = archive.paths.archivedSites + asset;
