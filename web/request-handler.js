@@ -14,9 +14,9 @@ exports.handleRequest = function (req, res) {
     url = '/index.html';
   }
   if(req.method === "GET") {
-    fs.readFile(archive.paths.list, 'utf8' ,function(err, data) {
-      console.log(archive.paths.list);
-      if(String.prototype.indexOf.call(data, url.slice(1)) > -1 || req.url === '/'){
+    fs.readdir(archive.paths.archivedSites, function(err, data) {
+      console.log(Array.isArray(data) );
+      if(data.indexOf(url.slice(1)) > -1 || req.url === '/'){
         res.writeHead(200, httpHelper.headers);
         httpHelper.serveAssets(res, url);
       } else {
